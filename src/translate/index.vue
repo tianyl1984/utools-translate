@@ -87,6 +87,9 @@ const handleEnter = async (event) => {
 };
 
 const translate = async (text) => {
+  if (text.trim().length === 0) {
+    return
+  }
   const cfg = configApi.getConfig();
   // console.log(cfg)
   if (!(cfg.baseUrl && cfg.apiKey && cfg.model)) {
@@ -155,6 +158,7 @@ const updateShowConfig = (flag) => {
 
 onMounted(() => {
   window.addEventListener("keydown", handleEnter);
+  handleEnter({ key: "Enter" })
 });
 
 onUnmounted(() => {
@@ -165,11 +169,12 @@ onUnmounted(() => {
 <template>
   <div v-if="!showConfig">
     <ul class="data-list">
-      <li v-for="data in listData" :key="data.id" @click="handleDataSelect(data)" :class="{ selected: data.select,loading: data.type === 'loading' }">
+      <li v-for="data in listData" :key="data.id" @click="handleDataSelect(data)"
+        :class="{ selected: data.select, loading: data.type === 'loading' }">
         {{ data.text }}
-          <span v-if="data.type === 'loading'">.</span>
-          <span v-if="data.type === 'loading'">.</span>
-          <span v-if="data.type === 'loading'">.</span>
+        <span v-if="data.type === 'loading'">.</span>
+        <span v-if="data.type === 'loading'">.</span>
+        <span v-if="data.type === 'loading'">.</span>
       </li>
     </ul>
   </div>
@@ -177,10 +182,11 @@ onUnmounted(() => {
 </template>
 
 <style>
-html, body {
-    overflow-x: hidden;
-    overflow-y: auto;
-    width: 100%;
+html,
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
 }
 
 .data-list {
@@ -209,14 +215,30 @@ html, body {
   animation: dots 1.5s steps(1, end) infinite;
 }
 
-.loading span:nth-child(1) { animation-delay: 0s; }
-.loading span:nth-child(2) { animation-delay: 0.5s; }
-.loading span:nth-child(3) { animation-delay: 1s; }
+.loading span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.loading span:nth-child(3) {
+  animation-delay: 1s;
+}
 
 @keyframes dots {
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 </style>
